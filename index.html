@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food & Drink Cost Calculator 2</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #dae6f3;
+      padding: 20px;
+      margin: 0;
+      text-align: center;
+    }
+
+    .widget {
+      max-width: 420px;
+      margin: auto;
+      background-color: #2c2c2c;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    h3 {
+      color: #3d85c6;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      max-width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #0b5394;
+      border-radius: 5px;
+      background-color: #353c41;
+      color: #dae6f3;
+      box-sizing: border-box;
+    }
+
+    button,
+    input[type="submit"] {
+      background-color: #0b5394;
+      color: #fff;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover,
+    input[type="submit"]:hover {
+      background-color: #3d85c6;
+      color: #1e1e1e;
+    }
+
+    .resultText {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background-color: #ffffff;
+        color: #353c41;
+      }
+
+      .widget {
+        background-color: #f5f5f5;
+      }
+
+      h3 {
+        color: #0b5394;
+      }
+
+      input,
+      select {
+        background-color: #dae6f3;
+        color: #353c41;
+        border: 1px solid #3d85c6;
+      }
+
+      input[type="submit"],
+      button {
+        background-color: #0b5394;
+        color: #fff;
+      }
+
+      input[type="submit"]:hover,
+      button:hover {
+        background-color: #3d85c6;
+        color: #1e1e1e;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="widget">
+    <h3>Food & Drink Cost Calculator 2</h3>
+    <form id="fdccForm2" onsubmit="event.preventDefault(); fdccCalculateCostPerUnit2();">
+      <label for="totalCost2">Total Cost:</label>
+      <input type="number" id="totalCost2" step="0.01" min="0.01" required>
+
+      <label for="numberOfUnits2">Number of Units:</label>
+      <input type="number" id="numberOfUnits2" step="0.01" min="0.01" required>
+
+      <label for="unitSize2">Size per Unit:</label>
+      <input type="number" id="unitSize2" step="0.01" min="0.01" required>
+
+      <label for="unitType2">Unit Type:</label>
+      <select id="unitType2">
+        <option value="fl oz">Fluid Ounce (fl oz)</option>
+        <option value="C">Cup (C)</option>
+        <option value="pt">Pint (pt)</option>
+        <option value="qt">Quart (qt)</option>
+        <option value="gal">Gallon (gal)</option>
+        <option value="oz">Ounce (oz)</option>
+        <option value="lb">Pound (lb)</option>
+        <option value="ml">Milliliter (ml)</option>
+        <option value="L">Liter (L)</option>
+        <option value="g">Gram (g)</option>
+        <option value="kg">Kilogram (kg)</option>
+      </select>
+
+      <input type="submit" value="Calculate">
+    </form>
+
+    <div id="fdccResults2" class="resultText">Results appear here</div>
+  </div>
+
+  <script>
+    function fdccCalculateCostPerUnit2() {
+      const totalCost = parseFloat(document.getElementById("totalCost2").value);
+      const numberOfUnits = parseFloat(document.getElementById("numberOfUnits2").value);
+      const unitSize = parseFloat(document.getElementById("unitSize2").value);
+      const unitType = document.getElementById("unitType2").value;
+
+      if (!totalCost || !numberOfUnits || !unitSize) {
+        document.getElementById("fdccResults2").innerHTML = "Please fill in all fields.";
+        return;
+      }
+
+      let costPerUnit = (totalCost / (numberOfUnits * unitSize)).toFixed(3);
+      let result = `Cost per ${unitType}: $${costPerUnit}`;
+
+      if (unitType === "lb") {
+        result += `<br>Cost per Ounce: $${(costPerUnit / 16).toFixed(3)}`;
+      } else if (unitType === "gal") {
+        result += `<br>Cost per Quart: $${(costPerUnit / 4).toFixed(3)}`;
+        result += `<br>Cost per Pint: $${(costPerUnit / 8).toFixed(3)}`;
+        result += `<br>Cost per Cup: $${(costPerUnit / 16).toFixed(3)}`;
+        result += `<br>Cost per Fluid Ounce: $${(costPerUnit / 128).toFixed(3)}`;
+      } else if (unitType === "qt") {
+        result += `<br>Cost per Pint: $${(costPerUnit / 2).toFixed(3)}`;
+        result += `<br>Cost per Cup: $${(costPerUnit / 4).toFixed(3)}`;
+        result += `<br>Cost per Fluid Ounce: $${(costPerUnit / 32).toFixed(3)}`;
+      } else if (unitType === "pt") {
+        result += `<br>Cost per Cup: $${(costPerUnit / 2).toFixed(3)}`;
+        result += `<br>Cost per Fluid Ounce: $${(costPerUnit / 16).toFixed(3)}`;
+      } else if (unitType === "L") {
+        result += `<br>Cost per Milliliter: $${(costPerUnit / 1000).toFixed(3)}`;
+      } else if (unitType === "kg") {
+        result += `<br>Cost per Gram: $${(costPerUnit / 1000).toFixed(3)}`;
+      }
+
+      document.getElementById("fdccResults2").innerHTML = result;
+    }
+  </script>
+
+</body>
+</html>
